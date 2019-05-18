@@ -20,15 +20,14 @@ begin
   current_last_modified = File.read("last-modified")
 
   if current_last_modified != materials_modified
-    puts "\nWebsite has been modified since you ran this. Visit the site now:
-          #{MATERIALS_URL}"
+    puts "\nWebsite has been modified since you ran this. Visit the site now: \n#{MATERIALS_URL}"
     File.write("last-modified", materials_modified)
+
+    notebook = NotebookGrabber.new NOTEBOOK_URL
+    notebook.process
   else
     puts "\nNah, it's chill."
   end
 rescue ex
   puts ex.message
 end
-
-notebook = NotebookGrabber.new NOTEBOOK_URL
-notebook.process

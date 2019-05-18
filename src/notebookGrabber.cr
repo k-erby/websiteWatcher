@@ -4,6 +4,7 @@ require "kernel"
 require "myhtml"
 require "file"
 
+
 class NotebookGrabber
 
   def initialize(url : String)
@@ -15,17 +16,19 @@ class NotebookGrabber
   def process
     @body = get_body
     @list = get_list
-    determine_notebook_format
+
+    determine_notebook_format_and_convert
+    puts "\nNotebook has been created."
   end
 
   def get_body
     response = HTTP::Client.exec "GET", @url
-    return response.body
+    response.body
   end
 
   def get_body(url)
     response = HTTP::Client.exec "GET", url
-    return response.body
+    response.body
   end
 
   def get_list
@@ -34,7 +37,7 @@ class NotebookGrabber
   end
 
   # check if prof posted a pdf or an html page
-  def determine_notebook_format
+  def determine_notebook_format_and_convert
     new_url = @url + @list.last
     body = get_body(new_url)
 
@@ -46,11 +49,11 @@ class NotebookGrabber
       pdf_to_file(pdf_list[0])
     else
       puts "PDF not found, generating html-to-file."
-      html_to_file(body)
+      html_to_file(@url, @list.last)
     end
   end
 
-  # Grab the pdf notebook via subprocess call, because it's annoying otherwise.
+  # grab the pdf notebook via subprocess call, because it's annoying otherwise.
   def pdf_to_file(pdf)
     url_to_pdf   = @url + pdf
     get_pdf_args = ["-r", "-A", "pdf", "-nd", "-e", "robots=off",
@@ -63,9 +66,20 @@ class NotebookGrabber
     end
   end
 
-  # add a latest notebook
-  def html_to_file(body)
-    # TODO
+  # converts the html page into a .txt for the notebook/, based on her pattern.
+  def html_to_file(url, notebook)
+    html_body   = get_body(url + notebook)
+    parsed_html = Myhtml::Parser.new(html_body)
+
+    notebook_entry = parsed_html.css(%q{p[class$="Body"]}).map(&.inner_text).to_a
+    create_file(notebook_entry, notebook)
+  end
+
+  def create_file(notebook_entry, notebook)
+    notebook_path = "notebooks/" + notebook.chomp(".html") + ".txt"
+    notebook_entry.each do |line|
+      File.write(notebook_path, "\n" + line, mode: "a")
+    end
   end
 
   def print
