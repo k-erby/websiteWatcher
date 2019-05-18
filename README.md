@@ -11,11 +11,11 @@ that's stored in `notebooks/`:
 Idk, I guess you can change the URL to one you want and take out the
 notebook stuff. You'd then run this:
 
-'''
+```bash
 shards install   # you'll need myhtml
 
 crystal run src/websiteWatcher.cr
-'''
+```
 
 ## Contributing
 
