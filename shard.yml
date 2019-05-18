@@ -2,11 +2,15 @@ name: websiteWatcher
 version: 0.1.0
 
 authors:
-  - @k-erby
+  - k-erby
 
 targets:
   websiteWatcher:
     main: src/websiteWatcher.cr
+
+dependencies:
+  myhtml:
+    github: kostya/myhtml
 
 crystal: 0.28.0
 
