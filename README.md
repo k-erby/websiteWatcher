@@ -1,19 +1,18 @@
 # websiteWatcher
 
-Just made to check if my prof modified her personal site to add new assignments
-and stuff. If she's put up a new entry, it'll check the format and create a file
-that's stored in `notebooks/`:
-- if it's a pdf, program runs a subprocess call to download it (through wget)
+Program that checks if my prof modified her personal site to add new
+assignments. If she's put up a new entry, it'll check the format of the
+assignment, then create a file that's stored in `notebooks/`:
+- if it's a pdf, program runs a subprocess call to download it (through `wget`)
 - if it's html, program will parse the html and convert parsed text to a `.txt`.
 
 ## Usage
 
-Idk, I guess you can change the URL to one you want and take out the
-notebook stuff. You'd then run this:
+I guess you can change the URL to one you want and take out the
+notebook stuff? You'd then run this:
 
 ```bash
 shards install   # you'll need myhtml
-
 crystal run src/websiteWatcher.cr
 ```
 

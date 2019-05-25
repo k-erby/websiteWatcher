@@ -4,7 +4,6 @@ require "kernel"
 require "myhtml"
 require "file"
 
-
 class NotebookGrabber
 
   def initialize(url : String)
